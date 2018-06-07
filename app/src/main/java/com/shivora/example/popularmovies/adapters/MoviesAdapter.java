@@ -10,15 +10,21 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.shivora.example.popularmovies.R;
+import com.shivora.example.popularmovies.data.Movie;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
     private int count;
-    public MoviesAdapter(int count) {
-        this.count = count;
+    private List<Movie> moviesList;
+    public MoviesAdapter(List<Movie> moviesList) {
+        this.moviesList = moviesList;
     }
 
     @NonNull
@@ -26,7 +32,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     public MoviesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        int itemLayoutId = R.layout.movie_list_item;
+        int itemLayoutId = R.layout.movie_item;
         boolean shouldAttachToParentImmediately = false;
 
         View listItem = inflater.inflate(itemLayoutId,parent,shouldAttachToParentImmediately);
@@ -42,15 +48,20 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     @Override
     public int getItemCount() {
-        return count;
+        return moviesList.size();
+    }
+
+    public void setMoviesList(List<Movie> moviesList){
+        this.moviesList = moviesList;
+        notifyDataSetChanged();
     }
 
     class MoviesViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.iv_movie_icon)
         ImageView ivMovieIcon;
-        @BindView(R.id.tv_movie_title)
+        //@BindView(R.id.tv_movie_title)
         TextView tvMovieTitle;
-        @BindView(R.id.ratingBar)
+        //@BindView(R.id.ratingBar)
         RatingBar ratingBar;
 
         public MoviesViewHolder(View itemView) {
@@ -59,9 +70,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         }
 
         public void bind(int position){
-            ivMovieIcon.setImageResource(R.mipmap.ic_launcher_round);
-            tvMovieTitle.setText("Movie Title");
-            ratingBar.setRating(4);
+            Movie movie = moviesList.get(position);
+            this.itemView.setId(movie.getMovieId());
+            Glide.with(this.itemView).load(movie.getMoviePosterUrl()).into(ivMovieIcon);
+          //  tvMovieTitle.setText(movie.getMovieTitle());
+            //ratingBar.setRating(movie.getMovieRating()/2);
         }
     }
 }

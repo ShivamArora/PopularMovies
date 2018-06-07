@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#000022"
+    app:cardBackgroundColor="#000022"
     android:layout_margin="0dp">
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp">
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp">
 
-        <RatingBar
+        <!--<RatingBar
             android:id="@+id/ratingBar"
             style="@style/Widget.AppCompat.RatingBar.Small"
             android:layout_width="wrap_content"
@@ -30,18 +31,20 @@
             android:id="@+id/tv_movie_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             app:layout_constraintEnd_toEndOf="@+id/iv_movie_icon"
             app:layout_constraintStart_toStartOf="@+id/iv_movie_icon"
             app:layout_constraintTop_toBottomOf="@+id/iv_movie_icon"
-            android:ellipsize="end"
-            android:gravity="start|left"
-            tools:text="Movie Title" />
+            tools:text="Movie Title" />-->
 
         <ImageView
             android:id="@+id/iv_movie_icon"
-            android:layout_width="140dp"
-            android:layout_height="200dp"
+            android:layout_width="160dp"
+            android:layout_height="220dp"
+            android:adjustViewBounds="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
