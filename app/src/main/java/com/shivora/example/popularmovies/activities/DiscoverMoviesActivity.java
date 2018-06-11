@@ -1,18 +1,17 @@
-package com.shivora.example.popularmovies;
+package com.shivora.example.popularmovies.activities;
 
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.shivora.example.popularmovies.R;
 import com.shivora.example.popularmovies.adapters.MoviesAdapter;
 import com.shivora.example.popularmovies.data.Movie;
 import com.shivora.example.popularmovies.utils.JsonUtils;
