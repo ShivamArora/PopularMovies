@@ -19,12 +19,19 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
+    public interface MovieItemClickListener{
+        void onMovieItemClick(int position);
+    }
+
     private int count;
     private List<Movie> moviesList;
-    public MoviesAdapter(List<Movie> moviesList) {
+    private MovieItemClickListener movieItemClickListener;
+    public MoviesAdapter(List<Movie> moviesList,MovieItemClickListener movieItemClickListener) {
         this.moviesList = moviesList;
+        this.movieItemClickListener = movieItemClickListener;
     }
 
     @NonNull
@@ -56,7 +63,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         notifyDataSetChanged();
     }
 
-    class MoviesViewHolder extends RecyclerView.ViewHolder{
+    class MoviesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.iv_movie_icon)
         ImageView ivMovieIcon;
         //@BindView(R.id.tv_movie_title)
@@ -66,6 +73,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
         public MoviesViewHolder(View itemView) {
             super(itemView);
+            this.itemView.setOnClickListener(this);
             ButterKnife.bind(this,itemView);
         }
 
@@ -75,6 +83,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             Glide.with(this.itemView).load(movie.getMoviePosterUrl()).into(ivMovieIcon);
           //  tvMovieTitle.setText(movie.getMovieTitle());
             //ratingBar.setRating(movie.getMovieRating()/2);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            movieItemClickListener.onMovieItemClick(position);
         }
     }
 }

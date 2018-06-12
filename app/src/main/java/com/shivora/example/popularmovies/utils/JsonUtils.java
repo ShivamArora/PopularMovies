@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JsonUtils {
-    public static final String BASE_URL_POSTER = "http://image.tmdb.org/t/p/w185";
+    public static final String BASE_URL_POSTER = "http://image.tmdb.org/t/p/w500";
 
     public static List<Movie> parseDiscoverMovies(String json){
         Movie movie;

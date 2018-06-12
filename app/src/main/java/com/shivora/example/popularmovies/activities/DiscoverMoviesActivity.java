@@ -1,5 +1,6 @@
 package com.shivora.example.popularmovies.activities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +32,7 @@ import butterknife.ButterKnife;
 
 import static android.view.View.GONE;
 
-public class DiscoverMoviesActivity extends AppCompatActivity {
+public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesAdapter.MovieItemClickListener{
 
     @BindView(R.id.recycler_view_movies)
     RecyclerView recyclerView;
@@ -63,8 +64,8 @@ public class DiscoverMoviesActivity extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,Integer.parseInt(spanCount));
         //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         recyclerView.setLayoutManager(gridLayoutManager);
-
-        adapter = new MoviesAdapter(moviesList);
+        Log.d(TAG, "onCreate: ");
+        adapter = new MoviesAdapter(moviesList,this);
 
         recyclerView.setAdapter(adapter);
 
@@ -143,6 +144,19 @@ public class DiscoverMoviesActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return url;
+    }
+
+    @Override
+    public void onMovieItemClick(int position) {
+        Movie movie = moviesList.get(position);
+        int movieId = movie.getMovieId();
+        startMovieDetailsActivity(movieId);
+    }
+
+    private void startMovieDetailsActivity(int movieId){
+        Intent moviesActivity = new Intent(DiscoverMoviesActivity.this,MovieDetailsActivity.class);
+        moviesActivity.putExtra("movie_id",movieId);
+        startActivity(moviesActivity);
     }
 
     enum SortOrder{
