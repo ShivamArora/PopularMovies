@@ -3,7 +3,7 @@
     <string name="app_name">Popular Movies</string>
     <string name="no_movies_found">No movies found!</string>
 
-    <string name="movies_api_key">ADD YOUR MOVIEDB API KEY HERE</string>
+    <!--<string name="movies_api_key">ADD YOUR MOVIEDB API KEY HERE</string>-->
     <string name="span_count">2</string>
 
     <!--Sort Options-->
