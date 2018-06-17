@@ -6,6 +6,8 @@ public class Movie{
     private String movieTitle;
     private String moviePosterUrl;
     private float movieRating;
+    private String moviePlot;
+    private String movieReleaseDate;
 
     public Movie() {
     }
@@ -15,6 +17,15 @@ public class Movie{
         this.movieTitle = movieTitle;
         this.moviePosterUrl = moviePosterUrl;
         this.movieRating = movieRating;
+    }
+
+    public Movie(int movieId, String movieTitle, String moviePosterUrl, float movieRating, String moviePlot, String movieReleaseDate) {
+        this.movieId = movieId;
+        this.movieTitle = movieTitle;
+        this.moviePosterUrl = moviePosterUrl;
+        this.movieRating = movieRating;
+        this.moviePlot = moviePlot;
+        this.movieReleaseDate = movieReleaseDate;
     }
 
     public int getMovieId() {
@@ -49,5 +60,19 @@ public class Movie{
         this.movieRating = movieRating;
     }
 
+    public String getMoviePlot() {
+        return moviePlot;
+    }
 
+    public void setMoviePlot(String moviePlot) {
+        this.moviePlot = moviePlot;
+    }
+
+    public String getMovieReleaseDate() {
+        return movieReleaseDate;
+    }
+
+    public void setMovieReleaseDate(String movieReleaseDate) {
+        this.movieReleaseDate = movieReleaseDate;
+    }
 }

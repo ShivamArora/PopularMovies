@@ -3,11 +3,15 @@ package com.shivora.example.popularmovies.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -29,6 +33,7 @@ import java.util.Scanner;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static android.view.View.GONE;
 
@@ -40,6 +45,9 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
     TextView tvEmptyList;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
+    @BindView(R.id.bottom_sheet_sort_options) View sortOptionsBottomSheet;
+    @BindView(R.id.tv_sorted_by) TextView tvSortedBy;
+
 
     @BindString(R.string.movies_api_key) String apiKey;
     @BindString(R.string.span_count) String spanCount;
@@ -49,11 +57,14 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
     private static final String TOP_RATED = "vote_average.desc";
     private static final String API_KEY = "api_key";
 
+    private BottomSheetBehavior bottomSheetBehavior;
+
     MoviesAdapter adapter;
     SortOrder sortOrder = SortOrder.SORT_BY_POPULARITY;
     String jsonResult;
     private static final String TAG = DiscoverMoviesActivity.class.getSimpleName();
     List<Movie> moviesList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,11 +79,54 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
         adapter = new MoviesAdapter(moviesList,this);
 
         recyclerView.setAdapter(adapter);
-
+        setupSortOptionsBottomSheet();
         new GetMoviesList().execute();
 
-
     }
+
+    private void setupSortOptionsBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(sortOptionsBottomSheet);
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+    }
+
+    @OnClick(R.id.layout_sorted_by)
+    public void toggleSortOptions(){
+        if (bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_COLLAPSED)
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        else
+            collapseSortOptions();
+    }
+
+    public void collapseSortOptions(){
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    @OnClick(R.id.layout_sort_by_popular)
+    public  void sortByPopular(){
+        sortOrder = SortOrder.SORT_BY_POPULARITY;
+        tvSortedBy.setText(R.string.popular);
+        collapseSortOptions();
+        new GetMoviesList().execute();
+    }
+
+    @OnClick(R.id.layout_sort_by_top_rated)
+    public void sortByTopRated(){
+        sortOrder = SortOrder.SORT_BY_TOP_RATED;
+        tvSortedBy.setText(R.string.top_rated);
+        collapseSortOptions();
+        new GetMoviesList().execute();
+    }
+
 
     class GetMoviesList extends AsyncTask<Void,Void,String>{
         URL url;
