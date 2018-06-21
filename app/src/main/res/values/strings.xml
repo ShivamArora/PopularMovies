@@ -14,4 +14,9 @@
     <string name="popular">Popular Movies</string>
     <string name="top_rated">Top Rated Movies</string>
     <string name="no_internet_connection">Internet not connected!</string>
+    <string name="cd_poster_image">Movie\'s poster image</string>
+    <string name="cd_rating">rating</string>
+    <string name="label_release_date">Release Date:</string>
+    <string name="label_rating">Rating:</string>
+    <string name="label_plot">Plot:</string>
 </resources>

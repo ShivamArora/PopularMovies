@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryLight"
     tools:context=".activities.MovieDetailsActivity">
 
     <TextView
@@ -42,6 +41,7 @@
                 android:layout_marginLeft="@dimen/dp_16"
                 android:layout_marginTop="@dimen/dp_16"
                 android:scaleType="fitXY"
+                android:contentDescription="@string/cd_poster_image"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_8"
-                android:text="Release Date:"
+                android:text="@string/label_release_date"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/tv_movie_name"
                 app:layout_constraintTop_toBottomOf="@+id/tv_movie_name" />
@@ -85,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_8"
-                android:text="Rating:"
+                android:text="@string/label_rating"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/tv_release_date"
                 app:layout_constraintTop_toBottomOf="@+id/tv_release_date" />
@@ -108,6 +108,7 @@
                 android:layout_marginEnd="@dimen/dp_8"
                 android:layout_marginRight="@dimen/dp_8"
                 android:layout_marginTop="@dimen/dp_8"
+                android:contentDescription="@string/cd_rating"
                 app:layout_constraintStart_toStartOf="@+id/textView4"
                 app:layout_constraintTop_toBottomOf="@+id/textView4"
                 app:srcCompat="@drawable/ic_round_star_rate_18px" />
@@ -121,7 +122,7 @@
                 android:layout_marginRight="@dimen/dp_16"
                 android:layout_marginStart="@dimen/dp_16"
                 android:layout_marginTop="@dimen/dp_16"
-                android:text="Plot:"
+                android:text="@string/label_plot"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

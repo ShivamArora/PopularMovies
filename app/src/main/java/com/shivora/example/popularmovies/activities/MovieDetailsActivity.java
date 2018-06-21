@@ -3,8 +3,6 @@ package com.shivora.example.popularmovies.activities;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Binder;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -51,7 +49,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
     TextView tvRating;
     @BindView(R.id.tv_movie_plot)
     TextView tvMoviePlot;
-    @BindView(android.R.id.content) View rootView;
     @BindView(R.id.tv_error_msg) TextView tvErrorMsg;
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
@@ -78,7 +75,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 Log.d(TAG, "onPreExecute: "+getString(R.string.no_internet_connection));
                 showErrorView(true,getString(R.string.no_internet_connection));
                 cancel(true);
-                return;
             }
             else{
                 showProgressBar(true);
@@ -154,8 +150,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
         tvMoviePlot.setText(movie.getMoviePlot());
 
         RequestOptions requestOptions = new RequestOptions();
-        requestOptions.placeholder(R.drawable.placeholder).centerInside();
-        requestOptions.error(R.drawable.ic_round_error_24px).centerInside();
+        requestOptions.placeholder(R.drawable.placeholder);
+        requestOptions.error(R.drawable.ic_round_error_24px);
 
         Glide.with(MovieDetailsActivity.this).load(movie.getMoviePosterUrl()).apply(requestOptions).transition(DrawableTransitionOptions.withCrossFade()).into(ivPosterImage);
     }

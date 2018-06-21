@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -116,7 +114,7 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
     }
 
     @OnClick(R.id.layout_sort_by_popular)
-    public  void sortByPopular(){
+    public void sortByPopular(){
         sortOrder = SortOrder.SORT_BY_POPULARITY;
         tvSortedBy.setText(R.string.popular);
         collapseSortOptions();
@@ -141,7 +139,7 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
             if (!ConnectionUtils.haveNetworkConnection(context)) {
                 progressBar.setVisibility(GONE);
                 recyclerView.setVisibility(GONE);
-                tvEmptyList.setText("Not connected to Internet!");
+                tvEmptyList.setText(R.string.no_internet_connection);
                 tvEmptyList.setVisibility(View.VISIBLE);
                 cancel(true);
             }

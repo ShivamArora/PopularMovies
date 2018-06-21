@@ -19,14 +19,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
     public interface MovieItemClickListener{
         void onMovieItemClick(int position);
     }
 
-    private int count;
     private List<Movie> moviesList;
     private MovieItemClickListener movieItemClickListener;
     public MoviesAdapter(List<Movie> moviesList,MovieItemClickListener movieItemClickListener) {
@@ -44,8 +42,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
         View listItem = inflater.inflate(itemLayoutId,parent,shouldAttachToParentImmediately);
 
-        MoviesViewHolder itemViewHolder = new MoviesViewHolder(listItem);
-        return itemViewHolder;
+        return new MoviesViewHolder(listItem);
     }
 
     @Override
@@ -66,10 +63,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     class MoviesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.iv_movie_icon)
         ImageView ivMovieIcon;
-        //@BindView(R.id.tv_movie_title)
-        TextView tvMovieTitle;
-        //@BindView(R.id.ratingBar)
-        RatingBar ratingBar;
 
         public MoviesViewHolder(View itemView) {
             super(itemView);
@@ -81,12 +74,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             Movie movie = moviesList.get(position);
             this.itemView.setId(movie.getMovieId());
             RequestOptions requestOptions = new RequestOptions();
-            requestOptions.placeholder(R.drawable.placeholder).centerInside();
-            requestOptions.error(R.drawable.ic_round_error_24px).centerInside();
+            requestOptions.placeholder(R.drawable.placeholder);
+            requestOptions.error(R.drawable.ic_round_error_24px);
 
             Glide.with(this.itemView).load(movie.getMoviePosterUrl()).apply(requestOptions).into(ivMovieIcon);
-          //  tvMovieTitle.setText(movie.getMovieTitle());
-            //ratingBar.setRating(movie.getMovieRating()/2);
         }
 
         @Override
