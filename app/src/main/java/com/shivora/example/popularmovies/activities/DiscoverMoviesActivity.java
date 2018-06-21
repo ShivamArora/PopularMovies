@@ -1,5 +1,6 @@
 package com.shivora.example.popularmovies.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.shivora.example.popularmovies.R;
 import com.shivora.example.popularmovies.adapters.MoviesAdapter;
 import com.shivora.example.popularmovies.data.Movie;
+import com.shivora.example.popularmovies.utils.ConnectionUtils;
 import com.shivora.example.popularmovies.utils.JsonUtils;
 
 import java.io.IOException;
@@ -64,6 +66,7 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
     String jsonResult;
     private static final String TAG = DiscoverMoviesActivity.class.getSimpleName();
     List<Movie> moviesList;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,7 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
         setContentView(R.layout.activity_discover_movies);
         ButterKnife.bind(this);
 
+        context = DiscoverMoviesActivity.this;
         moviesList = new ArrayList<>();
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,Integer.parseInt(spanCount));
         //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
@@ -133,10 +137,19 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
         @Override
         protected void onPreExecute() {
             url = buildURL(sortOrder);
-
-            progressBar.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(GONE);
-            tvEmptyList.setVisibility(GONE);
+            Log.d(TAG, "onPreExecute: "+ConnectionUtils.haveNetworkConnection(context));
+            if (!ConnectionUtils.haveNetworkConnection(context)) {
+                progressBar.setVisibility(GONE);
+                recyclerView.setVisibility(GONE);
+                tvEmptyList.setText("Not connected to Internet!");
+                tvEmptyList.setVisibility(View.VISIBLE);
+                cancel(true);
+            }
+            else {
+                progressBar.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(GONE);
+                tvEmptyList.setVisibility(GONE);
+            }
         }
 
         @Override

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Popular Movies</string>
+    <string name="app_name">Movie mania</string>
     <string name="no_movies_found">No movies found!</string>
 
+    <!--API KEY-->
     <!--<string name="movies_api_key">ADD YOUR MOVIEDB API KEY HERE</string>-->
+
     <string name="span_count">2</string>
 
     <!--Sort Options-->
@@ -11,4 +13,5 @@
     <string name="sort_by_top_rated">Sort by Top Rated</string>
     <string name="popular">Popular Movies</string>
     <string name="top_rated">Top Rated Movies</string>
+    <string name="no_internet_connection">Internet not connected!</string>
 </resources>

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryLight"
     tools:context=".activities.DiscoverMoviesActivity">
 
     <FrameLayout
@@ -31,6 +32,7 @@
             android:id="@+id/recycler_view_movies"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/sort_options_peek_height"
             android:visibility="visible" />
     </FrameLayout>
 

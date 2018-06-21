@@ -22,6 +22,7 @@ public class JsonUtils {
     public static final String KEY_VOTE_AVERAGE = "vote_average";
     public static final String KEY_RELEASE_DATE = "release_date";
     public static final String KEY_RESULTS = "results";
+    private static final String KEY_BACKDROP_PATH = "backdrop_path";
 
     public static List<Movie> parseDiscoverMovies(String json){
         Movie movie;
@@ -53,7 +54,8 @@ public class JsonUtils {
             int id = movieObject.getInt(KEY_ID);
             String title = movieObject.getString(KEY_TITLE);
             String plot = movieObject.getString(KEY_OVERVIEW);
-            String posterUrl = BASE_URL_POSTER + QUALITY_ORIGINAL + movieObject.getString("backdrop_path");
+            String backdropUrl = BASE_URL_POSTER + QUALITY_ORIGINAL + movieObject.getString(KEY_BACKDROP_PATH);
+            String posterUrl = BASE_URL_POSTER + QUALITY_500 + movieObject.getString(KEY_POSTER_PATH);
             float rating = Float.parseFloat(String.valueOf(movieObject.get(KEY_VOTE_AVERAGE)));
             String releaseDate = movieObject.getString(KEY_RELEASE_DATE);
 

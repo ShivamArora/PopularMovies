@@ -80,7 +80,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         public void bind(int position){
             Movie movie = moviesList.get(position);
             this.itemView.setId(movie.getMovieId());
-            Glide.with(this.itemView).load(movie.getMoviePosterUrl()).into(ivMovieIcon);
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions.placeholder(R.drawable.placeholder).centerInside();
+            requestOptions.error(R.drawable.ic_round_error_24px).centerInside();
+
+            Glide.with(this.itemView).load(movie.getMoviePosterUrl()).apply(requestOptions).into(ivMovieIcon);
           //  tvMovieTitle.setText(movie.getMovieTitle());
             //ratingBar.setRating(movie.getMovieRating()/2);
         }

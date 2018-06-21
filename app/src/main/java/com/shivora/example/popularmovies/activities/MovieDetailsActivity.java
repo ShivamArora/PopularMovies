@@ -1,13 +1,17 @@
 package com.shivora.example.popularmovies.activities;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Binder;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -15,6 +19,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.shivora.example.popularmovies.R;
 import com.shivora.example.popularmovies.data.Movie;
+import com.shivora.example.popularmovies.utils.ConnectionUtils;
 import com.shivora.example.popularmovies.utils.JsonUtils;
 
 import java.io.IOException;
@@ -46,8 +51,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
     TextView tvRating;
     @BindView(R.id.tv_movie_plot)
     TextView tvMoviePlot;
+    @BindView(android.R.id.content) View rootView;
+    @BindView(R.id.tv_error_msg) TextView tvErrorMsg;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+    @BindView(R.id.layout_movie_details) View movieDetailsLayout;
 
     Movie movie;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +66,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_details);
         ButterKnife.bind(this);
 
+        context = MovieDetailsActivity.this;
         int movieId = getIntent().getIntExtra("movie_id", 0);
         new GetMovieDetails().execute(movieId);
     }
@@ -62,7 +74,15 @@ public class MovieDetailsActivity extends AppCompatActivity {
     class GetMovieDetails extends AsyncTask<Integer, Void, String> {
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            if (!ConnectionUtils.haveNetworkConnection(context)){
+                Log.d(TAG, "onPreExecute: "+getString(R.string.no_internet_connection));
+                showErrorView(true,getString(R.string.no_internet_connection));
+                cancel(true);
+                return;
+            }
+            else{
+                showProgressBar(true);
+            }
         }
 
         @Override
@@ -89,16 +109,44 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String jsonResult) {
-            if (!TextUtils.isEmpty(jsonResult)) {
+            if (!TextUtils.isEmpty(jsonResult) || jsonResult!=null) {
                 Log.d(TAG, "onPostExecute: Got something");
                 Log.d(TAG, "onPostExecute: " + jsonResult);
                 movie = JsonUtils.parseMovieDetails(jsonResult);
 
+                showProgressBar(false);
                 setMovieDetails(movie);
             }
+
         }
     }
 
+    private void showProgressBar(boolean visible) {
+        if (visible){
+            progressBar.setVisibility(View.VISIBLE);
+            tvErrorMsg.setVisibility(View.GONE);
+            movieDetailsLayout.setVisibility(View.GONE);
+        }
+        else{
+            progressBar.setVisibility(View.GONE);
+            tvErrorMsg.setVisibility(View.GONE);
+            movieDetailsLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void showErrorView(boolean visible,String errorMsg){
+        if (visible){
+            progressBar.setVisibility(View.GONE);
+            tvErrorMsg.setText(errorMsg);
+            tvErrorMsg.setVisibility(View.VISIBLE);
+            movieDetailsLayout.setVisibility(View.GONE);
+        }
+        else{
+            progressBar.setVisibility(View.GONE);
+            tvErrorMsg.setVisibility(View.GONE);
+            movieDetailsLayout.setVisibility(View.VISIBLE);
+        }
+    }
     private void setMovieDetails(Movie movie) {
         tvMovieName.setText(movie.getMovieTitle());
         tvReleaseDate.setText(movie.getMovieReleaseDate());
@@ -106,7 +154,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         tvMoviePlot.setText(movie.getMoviePlot());
 
         RequestOptions requestOptions = new RequestOptions();
-        requestOptions.placeholder(R.drawable.loading_image).centerInside();
+        requestOptions.placeholder(R.drawable.placeholder).centerInside();
         requestOptions.error(R.drawable.ic_round_error_24px).centerInside();
 
         Glide.with(MovieDetailsActivity.this).load(movie.getMoviePosterUrl()).apply(requestOptions).transition(DrawableTransitionOptions.withCrossFade()).into(ivPosterImage);
