@@ -12,14 +12,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.DiscoverMoviesActivity">
+        <activity android:name=".activities.DiscoverMoviesActivity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MovieDetailsActivity"/>
+        <activity android:name=".activities.MovieDetailsActivity"
+            android:parentActivityName=".activities.DiscoverMoviesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.DiscoverMoviesActivity"/>
+        </activity>
     </application>
 
 </manifest>

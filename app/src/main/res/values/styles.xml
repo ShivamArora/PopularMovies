@@ -10,4 +10,19 @@
         <item name="android:windowBackground">@color/colorPrimaryLight</item>
     </style>
 
+    <style name="BaseTextStyle">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="fontFamily">sans-serif-smallcaps</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="PlotTextStyle" parent="BaseTextStyle">
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="LabelHeadText" parent="BaseTextStyle">
+        <item name="android:textColor">#b0ff57</item>
+    </style>
+
 </resources>
