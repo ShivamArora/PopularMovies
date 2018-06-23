@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:windowBackground">@color/colorPrimaryLight</item>
+        <item name="fontFamily">sans-serif-smallcaps</item>
     </style>
 
     <style name="BaseTextStyle">

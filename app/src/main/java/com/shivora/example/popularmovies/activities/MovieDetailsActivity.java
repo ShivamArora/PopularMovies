@@ -160,7 +160,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(R.drawable.placeholder);
-        requestOptions.error(R.drawable.ic_round_error_24px);
+        requestOptions.error(R.drawable.error_placeholder);
 
         Glide.with(MovieDetailsActivity.this).load(movie.getMoviePosterUrl()).apply(requestOptions).transition(DrawableTransitionOptions.withCrossFade()).into(ivPosterImage);
     }

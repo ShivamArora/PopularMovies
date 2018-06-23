@@ -75,7 +75,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             this.itemView.setId(movie.getMovieId());
             RequestOptions requestOptions = new RequestOptions();
             requestOptions.placeholder(R.drawable.placeholder);
-            requestOptions.error(R.drawable.ic_round_error_24px);
+            requestOptions.error(R.drawable.error_placeholder);
 
             Glide.with(this.itemView).load(movie.getMoviePosterUrl()).apply(requestOptions).into(ivMovieIcon);
         }

@@ -75,7 +75,6 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
         context = DiscoverMoviesActivity.this;
         moviesList = new ArrayList<>();
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,Integer.parseInt(spanCount));
-        //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         recyclerView.setLayoutManager(gridLayoutManager);
         Log.d(TAG, "onCreate: ");
         adapter = new MoviesAdapter(moviesList,this);
