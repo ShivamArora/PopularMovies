@@ -35,9 +35,12 @@ public class JsonUtils {
                 JSONObject movieObject = results.getJSONObject(i);
                 int id = movieObject.getInt(KEY_ID);
                 String title = movieObject.getString(KEY_TITLE);
-                float rating = Float.parseFloat(String.valueOf(movieObject.get(KEY_VOTE_AVERAGE)));
+                String plot = movieObject.getString(KEY_OVERVIEW);
                 String posterUrl = BASE_URL_POSTER + QUALITY_500 + movieObject.getString(KEY_POSTER_PATH);
-                movie = new Movie(id,title,posterUrl,rating);
+                float rating = Float.parseFloat(String.valueOf(movieObject.get(KEY_VOTE_AVERAGE)));
+                String releaseDate = movieObject.getString(KEY_RELEASE_DATE);
+
+                movie = new Movie(id,title,posterUrl,rating,plot,releaseDate);
                 moviesList.add(movie);
             }
         }catch (JSONException e){
@@ -45,23 +48,5 @@ public class JsonUtils {
         }
 
         return moviesList;
-    }
-
-    public static Movie parseMovieDetails(String json){
-        Movie movie = null;
-        try {
-            JSONObject movieObject = new JSONObject(json);
-            int id = movieObject.getInt(KEY_ID);
-            String title = movieObject.getString(KEY_TITLE);
-            String plot = movieObject.getString(KEY_OVERVIEW);
-            String posterUrl = BASE_URL_POSTER + QUALITY_500 + movieObject.getString(KEY_POSTER_PATH);
-            float rating = Float.parseFloat(String.valueOf(movieObject.get(KEY_VOTE_AVERAGE)));
-            String releaseDate = movieObject.getString(KEY_RELEASE_DATE);
-
-            movie = new Movie(id,title,posterUrl,rating,plot,releaseDate);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return movie;
     }
 }

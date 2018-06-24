@@ -40,7 +40,7 @@ import static android.view.View.GONE;
 
 public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesAdapter.MovieItemClickListener{
 
-    public static final String EXTRA_MOVIE_ID = "movie_id";
+    public static final String EXTRA_MOVIE = "movie";
     @BindView(R.id.recycler_view_movies)
     RecyclerView recyclerView;
     @BindView(R.id.tv_empty_list)
@@ -227,13 +227,12 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
     @Override
     public void onMovieItemClick(int position) {
         Movie movie = moviesList.get(position);
-        int movieId = movie.getMovieId();
-        startMovieDetailsActivity(movieId);
+        startMovieDetailsActivity(movie);
     }
 
-    private void startMovieDetailsActivity(int movieId){
+    private void startMovieDetailsActivity(Movie movie){
         Intent moviesActivity = new Intent(DiscoverMoviesActivity.this,MovieDetailsActivity.class);
-        moviesActivity.putExtra(EXTRA_MOVIE_ID,movieId);
+        moviesActivity.putExtra(EXTRA_MOVIE,movie);
         startActivity(moviesActivity);
     }
 

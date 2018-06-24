@@ -52,10 +52,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
     TextView tvRating;
     @BindView(R.id.tv_movie_plot)
     TextView tvMoviePlot;
-    @BindView(R.id.tv_error_msg)
-    TextView tvErrorMsg;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
     @BindView(R.id.layout_movie_details)
     View movieDetailsLayout;
 
@@ -75,80 +71,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
 
         context = MovieDetailsActivity.this;
-        int movieId = getIntent().getIntExtra(DiscoverMoviesActivity.EXTRA_MOVIE_ID, 0);
-        new GetMovieDetails().execute(movieId);
-    }
+        movie = getIntent().getParcelableExtra(DiscoverMoviesActivity.EXTRA_MOVIE);
 
-    class GetMovieDetails extends AsyncTask<Integer, Void, String> {
-        @Override
-        protected void onPreExecute() {
-            if (!ConnectionUtils.haveNetworkConnection(context)) {
-                showErrorView(true, getString(R.string.no_internet_connection));
-                cancel(true);
-            } else {
-                showProgressBar(true);
-            }
-        }
-
-        @Override
-        protected String doInBackground(Integer... integers) {
-            URL url = buildURL(integers[0]);
-            Log.d(TAG, "URL: " + url.toString());
-            HttpURLConnection urlConnection = null;
-            String result = null;
-            try {
-                urlConnection = (HttpURLConnection) url.openConnection();
-
-                if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    Scanner scanner = new Scanner(urlConnection.getInputStream());
-                    scanner.useDelimiter("\\A");
-                    result = scanner.next();
-                } else {
-                    Log.e(TAG, "doInBackground: Failed to get movie data");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String jsonResult) {
-            if (!TextUtils.isEmpty(jsonResult) || jsonResult != null) {
-                Log.d(TAG, "onPostExecute: Got something");
-                Log.d(TAG, "onPostExecute: " + jsonResult);
-                movie = JsonUtils.parseMovieDetails(jsonResult);
-
-                showProgressBar(false);
-                setMovieDetails(movie);
-            }
-
-        }
-    }
-
-    private void showProgressBar(boolean visible) {
-        if (visible) {
-            progressBar.setVisibility(View.VISIBLE);
-            tvErrorMsg.setVisibility(View.GONE);
-            movieDetailsLayout.setVisibility(View.GONE);
-        } else {
-            progressBar.setVisibility(View.GONE);
-            tvErrorMsg.setVisibility(View.GONE);
-            movieDetailsLayout.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void showErrorView(boolean visible, String errorMsg) {
-        if (visible) {
-            progressBar.setVisibility(View.GONE);
-            tvErrorMsg.setText(errorMsg);
-            tvErrorMsg.setVisibility(View.VISIBLE);
-            movieDetailsLayout.setVisibility(View.GONE);
-        } else {
-            progressBar.setVisibility(View.GONE);
-            tvErrorMsg.setVisibility(View.GONE);
-            movieDetailsLayout.setVisibility(View.VISIBLE);
-        }
+        setMovieDetails(movie);
     }
 
     private void setMovieDetails(Movie movie) {
@@ -162,21 +87,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         requestOptions.error(R.drawable.error_placeholder);
 
         Glide.with(MovieDetailsActivity.this).load(movie.getMoviePosterUrl()).apply(requestOptions).transition(DrawableTransitionOptions.withCrossFade()).into(ivPosterImage);
-    }
-
-    private URL buildURL(int movieId) {
-        Uri uri = Uri.parse(BASE_URL).buildUpon()
-                .appendPath(String.valueOf(movieId))
-                .appendQueryParameter(API_KEY, apiKey)
-                .build();
-
-        URL url = null;
-        try {
-            url = new URL(uri.toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return url;
     }
 
     @Override
