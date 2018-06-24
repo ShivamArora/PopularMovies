@@ -12,6 +12,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -47,6 +48,8 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
     ProgressBar progressBar;
     @BindView(R.id.bottom_sheet_sort_options) View sortOptionsBottomSheet;
     @BindView(R.id.tv_sorted_by) TextView tvSortedBy;
+    @BindView(R.id.imageView)
+    ImageView bottomSheetIcon;
 
 
     @BindString(R.string.movies_api_key) String apiKey;
@@ -90,7 +93,10 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-
+                bottomSheetIcon.setImageResource(
+                                newState==BottomSheetBehavior.STATE_SETTLING||newState==BottomSheetBehavior.STATE_EXPANDED
+                                ?R.drawable.ic_round_arrow_drop_down_circle_24px
+                                :R.drawable.ic_round_arrow_up_circle_24px);
             }
 
             @Override

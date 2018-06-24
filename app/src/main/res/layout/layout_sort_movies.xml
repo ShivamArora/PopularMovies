@@ -31,7 +31,7 @@
             app:layout_constraintBottom_toTopOf="@+id/tv_sorted_by"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_sorted_by"
-            app:srcCompat="@drawable/ic_round_arrow_drop_down_circle_24px" />
+            app:srcCompat="@drawable/ic_round_arrow_up_circle_24px" />
 
         <TextView
             android:id="@+id/tv_sorted_by"
