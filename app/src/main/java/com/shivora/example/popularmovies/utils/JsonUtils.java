@@ -54,7 +54,6 @@ public class JsonUtils {
             int id = movieObject.getInt(KEY_ID);
             String title = movieObject.getString(KEY_TITLE);
             String plot = movieObject.getString(KEY_OVERVIEW);
-            String backdropUrl = BASE_URL_POSTER + QUALITY_ORIGINAL + movieObject.getString(KEY_BACKDROP_PATH);
             String posterUrl = BASE_URL_POSTER + QUALITY_500 + movieObject.getString(KEY_POSTER_PATH);
             float rating = Float.parseFloat(String.valueOf(movieObject.get(KEY_VOTE_AVERAGE)));
             String releaseDate = movieObject.getString(KEY_RELEASE_DATE);

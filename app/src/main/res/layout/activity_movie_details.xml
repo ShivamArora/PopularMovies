@@ -35,8 +35,8 @@
 
             <ImageView
                 android:id="@+id/iv_poster_image"
-                android:layout_width="150dp"
-                android:layout_height="250dp"
+                android:layout_width="@dimen/movie_details_poster_width"
+                android:layout_height="@dimen/movie_details_poster_height"
                 android:layout_marginStart="@dimen/dp_16"
                 android:layout_marginLeft="@dimen/dp_16"
                 android:layout_marginTop="@dimen/dp_16"
@@ -67,7 +67,7 @@
                 style="@style/LabelHeadText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="@dimen/dp_32"
                 android:text="@string/label_release_date"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/tv_movie_name"

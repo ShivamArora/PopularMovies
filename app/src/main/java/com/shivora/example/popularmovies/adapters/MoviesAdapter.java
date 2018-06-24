@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -26,7 +24,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     }
 
     private List<Movie> moviesList;
-    private MovieItemClickListener movieItemClickListener;
+    private final MovieItemClickListener movieItemClickListener;
     public MoviesAdapter(List<Movie> moviesList,MovieItemClickListener movieItemClickListener) {
         this.moviesList = moviesList;
         this.movieItemClickListener = movieItemClickListener;

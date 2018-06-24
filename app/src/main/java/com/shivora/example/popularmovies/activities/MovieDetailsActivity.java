@@ -75,7 +75,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
 
         context = MovieDetailsActivity.this;
-        int movieId = getIntent().getIntExtra("movie_id", 0);
+        int movieId = getIntent().getIntExtra(DiscoverMoviesActivity.EXTRA_MOVIE_ID, 0);
         new GetMovieDetails().execute(movieId);
     }
 
@@ -83,7 +83,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             if (!ConnectionUtils.haveNetworkConnection(context)) {
-                Log.d(TAG, "onPreExecute: " + getString(R.string.no_internet_connection));
                 showErrorView(true, getString(R.string.no_internet_connection));
                 cancel(true);
             } else {

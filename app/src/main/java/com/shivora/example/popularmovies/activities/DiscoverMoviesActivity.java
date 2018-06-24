@@ -40,6 +40,7 @@ import static android.view.View.GONE;
 
 public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesAdapter.MovieItemClickListener{
 
+    public static final String EXTRA_MOVIE_ID = "movie_id";
     @BindView(R.id.recycler_view_movies)
     RecyclerView recyclerView;
     @BindView(R.id.tv_empty_list)
@@ -77,12 +78,13 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
 
         context = DiscoverMoviesActivity.this;
         moviesList = new ArrayList<>();
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,Integer.parseInt(spanCount));
         recyclerView.setLayoutManager(gridLayoutManager);
-        Log.d(TAG, "onCreate: ");
-        adapter = new MoviesAdapter(moviesList,this);
 
+        adapter = new MoviesAdapter(moviesList,this);
         recyclerView.setAdapter(adapter);
+
         setupSortOptionsBottomSheet();
         new GetMoviesList().execute();
 
@@ -140,7 +142,7 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
         @Override
         protected void onPreExecute() {
             url = buildURL(sortOrder);
-            Log.d(TAG, "onPreExecute: "+ConnectionUtils.haveNetworkConnection(context));
+
             if (!ConnectionUtils.haveNetworkConnection(context)) {
                 progressBar.setVisibility(GONE);
                 recyclerView.setVisibility(GONE);
@@ -225,7 +227,7 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
 
     private void startMovieDetailsActivity(int movieId){
         Intent moviesActivity = new Intent(DiscoverMoviesActivity.this,MovieDetailsActivity.class);
-        moviesActivity.putExtra("movie_id",movieId);
+        moviesActivity.putExtra(EXTRA_MOVIE_ID,movieId);
         startActivity(moviesActivity);
     }
 
