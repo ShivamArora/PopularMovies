@@ -1,7 +1,10 @@
 package com.shivora.example.popularmovies.data;
 
 
-public class Movie{
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Movie implements Parcelable{
     private int movieId;
     private String movieTitle;
     private String moviePosterUrl;
@@ -74,5 +77,45 @@ public class Movie{
 
     public void setMovieReleaseDate(String movieReleaseDate) {
         this.movieReleaseDate = movieReleaseDate;
+    }
+
+    //Contents below to make model a parcelable object
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(movieId);
+        dest.writeString(movieTitle);
+        dest.writeString(moviePosterUrl);
+        dest.writeFloat(movieRating);
+        dest.writeString(moviePlot);
+        dest.writeString(movieReleaseDate);
+    }
+
+    //CREATOR
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>(){
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            return new Movie(source);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    //De-parcel the object
+    public Movie(Parcel in){
+        movieId = in.readInt();
+        movieTitle = in.readString();
+        moviePosterUrl = in.readString();
+        movieRating = in.readFloat();
+        moviePlot = in.readString();
+        movieReleaseDate = in.readString();
     }
 }
