@@ -56,10 +56,14 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
     @BindString(R.string.movies_api_key) String apiKey;
     @BindString(R.string.span_count) String spanCount;
 
-    private static final String BASE_URL = "http://api.themoviedb.org/3/discover/movie?";
-    private static final String POPULARITY = "popularity.desc";
-    private static final String TOP_RATED = "vote_average.desc";
+    private static final String BASE_URL = "http://api.themoviedb.org/3/movie/";
+    private static final String POPULARITY = "popular";
+    private static final String TOP_RATED = "top_rated";
     private static final String API_KEY = "api_key";
+    private static final String PARAM_LANGUAGE = "language";
+    private static final String PARAM_PAGE_NO = "page";
+    private static final String LANGUAGE_ENGLISH = "en-US";
+    private int pageNumber = 1;
 
     private BottomSheetBehavior bottomSheetBehavior;
 
@@ -206,8 +210,10 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
     private URL buildURL(SortOrder sortOrder){
         URL url = null;
         Uri uri = Uri.parse(BASE_URL).buildUpon()
-                .appendQueryParameter("sort_by",sortOrder==SortOrder.SORT_BY_POPULARITY?POPULARITY:TOP_RATED)
+                .appendPath(sortOrder==SortOrder.SORT_BY_POPULARITY?POPULARITY:TOP_RATED)
                 .appendQueryParameter(API_KEY,apiKey)
+                .appendQueryParameter(PARAM_LANGUAGE,LANGUAGE_ENGLISH)
+                .appendQueryParameter(PARAM_PAGE_NO,String.valueOf(pageNumber))
                 .build();
 
         try{
