@@ -1,12 +1,20 @@
 package com.shivora.example.popularmovies.data;
 
 
+import com.google.gson.annotations.SerializedName;
+
 public class Movie{
+    @SerializedName("id")
     private int movieId;
+    @SerializedName("title")
     private String movieTitle;
+    @SerializedName("poster_path")
     private String moviePosterUrl;
+    @SerializedName("vote_average")
     private float movieRating;
+    @SerializedName("overview")
     private String moviePlot;
+    @SerializedName("release_date")
     private String movieReleaseDate;
 
     public Movie() {
