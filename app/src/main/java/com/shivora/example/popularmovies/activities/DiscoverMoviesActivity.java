@@ -2,8 +2,6 @@ package com.shivora.example.popularmovies.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
@@ -15,42 +13,28 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shivora.example.popularmovies.R;
 import com.shivora.example.popularmovies.adapters.MoviesAdapter;
 import com.shivora.example.popularmovies.data.Movie;
 import com.shivora.example.popularmovies.data.MoviesList;
 import com.shivora.example.popularmovies.utils.ConnectionUtils;
-import com.shivora.example.popularmovies.utils.JsonUtils;
 import com.shivora.example.popularmovies.utils.NetworkingUtils;
 import com.shivora.example.popularmovies.utils.TheMovieDbApi;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.view.View.GONE;
-import static android.view.View.OVER_SCROLL_NEVER;
 
 public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesAdapter.MovieItemClickListener{
 
@@ -77,7 +61,6 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
 
     MoviesAdapter adapter;
     SortOrder sortOrder = SortOrder.SORT_BY_POPULARITY;
-    String jsonResult;
     private static final String TAG = DiscoverMoviesActivity.class.getSimpleName();
     private static List<Movie> moviesList;
     private Context context;

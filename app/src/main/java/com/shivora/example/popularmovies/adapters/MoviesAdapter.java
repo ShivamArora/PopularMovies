@@ -18,10 +18,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
-    public static final String BASE_URL_POSTER = "http://image.tmdb.org/t/p/";
+import static com.shivora.example.popularmovies.utils.NetworkingUtils.BASE_URL_POSTER;
+import static com.shivora.example.popularmovies.utils.NetworkingUtils.QUALITY_500;
 
-    public static final String QUALITY_500 = "w500";
+public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
 
     public interface MovieItemClickListener{
         void onMovieItemClick(int position);

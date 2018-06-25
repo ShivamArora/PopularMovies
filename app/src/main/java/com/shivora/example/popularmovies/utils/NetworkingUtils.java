@@ -1,25 +1,23 @@
 package com.shivora.example.popularmovies.utils;
 
-import android.content.Context;
-import android.widget.Toast;
 
 
 import java.io.IOException;
-import java.util.List;
 
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkingUtils {
 
     public static final String BASE_URL = "https://api.themoviedb.org/";
+    public static final String BASE_URL_POSTER = "http://image.tmdb.org/t/p/";
+
+    public static final String QUALITY_500 = "w500";
+
     private static final String API_KEY = "api_key";
     private static final String PARAM_LANGUAGE = "language";
     private static final String LANGUAGE_ENGLISH = "en-US";

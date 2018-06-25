@@ -2,17 +2,11 @@ package com.shivora.example.popularmovies.activities;
 
 import android.app.ActionBar;
 import android.content.Context;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -20,27 +14,16 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.shivora.example.popularmovies.R;
 import com.shivora.example.popularmovies.data.Movie;
-import com.shivora.example.popularmovies.utils.ConnectionUtils;
-import com.shivora.example.popularmovies.utils.JsonUtils;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Scanner;
-
-import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.shivora.example.popularmovies.utils.NetworkingUtils.BASE_URL_POSTER;
+import static com.shivora.example.popularmovies.utils.NetworkingUtils.QUALITY_500;
+
 public class MovieDetailsActivity extends AppCompatActivity {
 
-    private static final String BASE_URL = "http://api.themoviedb.org/3/movie";
-    private static final String API_KEY = "api_key";
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
-
-    @BindString(R.string.movies_api_key)
-    String apiKey;
 
     @BindView(R.id.tv_movie_name)
     TextView tvMovieName;
@@ -52,8 +35,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
     TextView tvRating;
     @BindView(R.id.tv_movie_plot)
     TextView tvMoviePlot;
-    @BindView(R.id.layout_movie_details)
-    View movieDetailsLayout;
 
     Movie movie;
     private Context context;
@@ -86,7 +67,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         requestOptions.placeholder(R.drawable.placeholder);
         requestOptions.error(R.drawable.error_placeholder);
 
-        Glide.with(MovieDetailsActivity.this).load(movie.getMoviePosterUrl()).apply(requestOptions).transition(DrawableTransitionOptions.withCrossFade()).into(ivPosterImage);
+        Glide.with(MovieDetailsActivity.this).load(BASE_URL_POSTER+QUALITY_500+movie.getMoviePosterUrl()).apply(requestOptions).transition(DrawableTransitionOptions.withCrossFade()).into(ivPosterImage);
     }
 
     @Override
