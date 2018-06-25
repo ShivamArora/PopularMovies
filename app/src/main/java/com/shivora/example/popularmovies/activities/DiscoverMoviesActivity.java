@@ -15,12 +15,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shivora.example.popularmovies.R;
 import com.shivora.example.popularmovies.adapters.MoviesAdapter;
 import com.shivora.example.popularmovies.data.Movie;
+import com.shivora.example.popularmovies.data.MoviesList;
 import com.shivora.example.popularmovies.utils.ConnectionUtils;
 import com.shivora.example.popularmovies.utils.JsonUtils;
+import com.shivora.example.popularmovies.utils.NetworkingUtils;
+import com.shivora.example.popularmovies.utils.TheMovieDbApi;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,8 +39,18 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.view.View.GONE;
+import static android.view.View.OVER_SCROLL_NEVER;
 
 public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesAdapter.MovieItemClickListener{
 
@@ -56,14 +70,8 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
     @BindString(R.string.movies_api_key) String apiKey;
     @BindString(R.string.span_count) String spanCount;
 
-    private static final String BASE_URL = "http://api.themoviedb.org/3/movie/";
     private static final String POPULARITY = "popular";
     private static final String TOP_RATED = "top_rated";
-    private static final String API_KEY = "api_key";
-    private static final String PARAM_LANGUAGE = "language";
-    private static final String PARAM_PAGE_NO = "page";
-    private static final String LANGUAGE_ENGLISH = "en-US";
-    private int pageNumber = 1;
 
     private BottomSheetBehavior bottomSheetBehavior;
 
@@ -71,7 +79,7 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
     SortOrder sortOrder = SortOrder.SORT_BY_POPULARITY;
     String jsonResult;
     private static final String TAG = DiscoverMoviesActivity.class.getSimpleName();
-    List<Movie> moviesList;
+    private static List<Movie> moviesList;
     private Context context;
 
     @Override
@@ -90,8 +98,7 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
         recyclerView.setAdapter(adapter);
 
         setupSortOptionsBottomSheet();
-        new GetMoviesList().execute();
-
+        getMoviesList();
     }
 
     private void setupSortOptionsBottomSheet() {
@@ -112,6 +119,33 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
         });
     }
 
+    private void showProgressBar(boolean visible){
+        if(visible){
+            recyclerView.setVisibility(GONE);
+            progressBar.setVisibility(View.VISIBLE);
+            tvEmptyList.setVisibility(GONE);
+        }
+        else{
+            recyclerView.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(GONE);
+            tvEmptyList.setVisibility(GONE);
+        }
+    }
+
+    private void showErrorView(boolean visible,String errorMsg){
+        if (visible){
+            recyclerView.setVisibility(GONE);
+            progressBar.setVisibility(GONE);
+            tvEmptyList.setVisibility(View.VISIBLE);
+            tvEmptyList.setText(errorMsg);
+        }
+        else{
+            recyclerView.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(GONE);
+            tvEmptyList.setVisibility(GONE);
+        }
+    }
+
     @OnClick(R.id.layout_sorted_by)
     public void toggleSortOptions(){
         if (bottomSheetBehavior.getState()==BottomSheetBehavior.STATE_COLLAPSED)
@@ -129,7 +163,7 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
         sortOrder = SortOrder.SORT_BY_POPULARITY;
         tvSortedBy.setText(R.string.popular);
         collapseSortOptions();
-        new GetMoviesList().execute();
+        getMoviesList();
     }
 
     @OnClick(R.id.layout_sort_by_top_rated)
@@ -137,91 +171,7 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
         sortOrder = SortOrder.SORT_BY_TOP_RATED;
         tvSortedBy.setText(R.string.top_rated);
         collapseSortOptions();
-        new GetMoviesList().execute();
-    }
-
-
-    class GetMoviesList extends AsyncTask<Void,Void,String>{
-        URL url;
-        @Override
-        protected void onPreExecute() {
-            url = buildURL(sortOrder);
-
-            if (!ConnectionUtils.haveNetworkConnection(context)) {
-                progressBar.setVisibility(GONE);
-                recyclerView.setVisibility(GONE);
-                tvEmptyList.setText(R.string.no_internet_connection);
-                tvEmptyList.setVisibility(View.VISIBLE);
-                cancel(true);
-            }
-            else {
-                progressBar.setVisibility(View.VISIBLE);
-                recyclerView.setVisibility(GONE);
-                tvEmptyList.setVisibility(GONE);
-            }
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            String json = null;
-            try {
-                Log.i(TAG,"URL: "+url.toString());
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                Log.i(TAG,"Response Code: "+urlConnection.getResponseCode());
-                if (urlConnection.getResponseCode()==HttpURLConnection.HTTP_OK){
-                    InputStream inputStream = urlConnection.getInputStream();
-                    Scanner scanner = new Scanner(inputStream);
-                    scanner.useDelimiter("\\A");
-
-                    if (scanner.hasNext())
-                        json = scanner.next();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return json;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            jsonResult = result;
-            Log.i(TAG,jsonResult);
-
-            moviesList = JsonUtils.parseDiscoverMovies(jsonResult);
-            for(Movie movie: moviesList){
-                Log.i(TAG,movie.getMovieTitle());
-            }
-
-            if (moviesList==null){
-                progressBar.setVisibility(GONE);
-                recyclerView.setVisibility(GONE);
-                tvEmptyList.setVisibility(View.VISIBLE);
-            }
-            else{
-                progressBar.setVisibility(GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-                tvEmptyList.setVisibility(GONE);
-            }
-            adapter.setMoviesList(moviesList);
-        }
-    }
-
-    private URL buildURL(SortOrder sortOrder){
-        URL url = null;
-        Uri uri = Uri.parse(BASE_URL).buildUpon()
-                .appendPath(sortOrder==SortOrder.SORT_BY_POPULARITY?POPULARITY:TOP_RATED)
-                .appendQueryParameter(API_KEY,apiKey)
-                .appendQueryParameter(PARAM_LANGUAGE,LANGUAGE_ENGLISH)
-                .appendQueryParameter(PARAM_PAGE_NO,String.valueOf(pageNumber))
-                .build();
-
-        try{
-            url = new URL(uri.toString());
-        }catch (MalformedURLException e){
-            e.printStackTrace();
-        }
-        return url;
+        getMoviesList();
     }
 
     @Override
@@ -236,8 +186,68 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
         startActivity(moviesActivity);
     }
 
+    //Sort Order enumerable
     enum SortOrder{
         SORT_BY_POPULARITY,
         SORT_BY_TOP_RATED
+    }
+
+    //Retrofit Implementation
+
+    public void getMoviesList(){
+        if (!ConnectionUtils.haveNetworkConnection(context)){
+            showErrorView(true,getString(R.string.no_internet_connection));
+            return;
+        }
+        else{
+            showProgressBar(true);
+        }
+
+        //Retrofit
+        Retrofit retrofit = NetworkingUtils.getRetrofitInstance(apiKey);
+
+        TheMovieDbApi movieDbApi = retrofit.create(TheMovieDbApi.class);
+
+        Call<MoviesList> call = movieDbApi.getMoviesList(sortOrder==SortOrder.SORT_BY_POPULARITY?POPULARITY:TOP_RATED);
+
+        call.enqueue(new Callback<MoviesList>() {
+            @Override
+            public void onResponse(Call<MoviesList> call, Response<MoviesList> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "onResponse: Success");
+                    Log.d(TAG, "onResponse: ");
+
+                    showProgressBar(false);
+                    setMoviesList(response.body().getMoviesList());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MoviesList> call, Throwable t) {
+               // Toast.makeText(context,"Failed to fetch data!",Toast.LENGTH_LONG).show();
+                Log.d(TAG, "onFailure: "+t.getMessage());
+                showErrorView(true,t.getMessage());
+            }
+        });
+        Log.d(TAG, "getMoviesList: Fetching Movies");
+    }
+
+    private void setMoviesList(List<Movie> movies) {
+        moviesList = movies;
+        for(Movie movie: moviesList){
+            Log.i(TAG,movie.getMovieTitle());
+        }
+
+        if (moviesList==null){
+            progressBar.setVisibility(GONE);
+            recyclerView.setVisibility(GONE);
+            tvEmptyList.setVisibility(View.VISIBLE);
+        }
+        else{
+            progressBar.setVisibility(GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            tvEmptyList.setVisibility(GONE);
+        }
+        adapter.setMoviesList(moviesList);
     }
 }

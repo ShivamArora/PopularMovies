@@ -19,6 +19,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
+    public static final String BASE_URL_POSTER = "http://image.tmdb.org/t/p/";
+
+    public static final String QUALITY_500 = "w500";
+
     public interface MovieItemClickListener{
         void onMovieItemClick(int position);
     }
@@ -75,7 +79,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             requestOptions.placeholder(R.drawable.placeholder);
             requestOptions.error(R.drawable.error_placeholder);
 
-            Glide.with(this.itemView).load(movie.getMoviePosterUrl()).apply(requestOptions).into(ivMovieIcon);
+            Glide.with(this.itemView).load(BASE_URL_POSTER+QUALITY_500+movie.getMoviePosterUrl()).apply(requestOptions).into(ivMovieIcon);
         }
 
         @Override

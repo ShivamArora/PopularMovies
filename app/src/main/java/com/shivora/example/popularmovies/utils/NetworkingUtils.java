@@ -1,0 +1,64 @@
+package com.shivora.example.popularmovies.utils;
+
+import android.content.Context;
+import android.widget.Toast;
+
+
+import java.io.IOException;
+import java.util.List;
+
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+public class NetworkingUtils {
+
+    public static final String BASE_URL = "https://api.themoviedb.org/";
+    private static final String API_KEY = "api_key";
+    private static final String PARAM_LANGUAGE = "language";
+    private static final String LANGUAGE_ENGLISH = "en-US";
+    private static final String PARAM_PAGE_NO = "page";
+    private static int pageNumber = 1;
+
+    public static Retrofit getRetrofitInstance(final String apiKey){
+        Retrofit retrofit;
+
+        //OkHttpBuilder
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addInterceptor(new Interceptor() {
+            @Override
+            public okhttp3.Response intercept(Chain chain) throws IOException {
+                Request original = chain.request();
+                HttpUrl originalHttpUrl = original.url();
+
+                HttpUrl url = originalHttpUrl.newBuilder()
+                        .addQueryParameter(API_KEY,apiKey)
+                        .addQueryParameter(PARAM_LANGUAGE,LANGUAGE_ENGLISH)
+                        .addQueryParameter(PARAM_PAGE_NO,String.valueOf(pageNumber))
+                        .build();
+
+                Request.Builder requestBuilder = original.newBuilder()
+                        .url(url);
+                System.out.println("URL: "+url);
+                Request request = requestBuilder.build();
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create());
+
+        retrofit = retrofitBuilder
+                .client(httpClient.build())
+                .build();
+
+        return retrofit;
+    }
+}

@@ -3,13 +3,21 @@ package com.shivora.example.popularmovies.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.google.gson.annotations.SerializedName;
 
 public class Movie implements Parcelable{
+
+    @SerializedName("id")
     private int movieId;
+    @SerializedName("title")
     private String movieTitle;
+    @SerializedName("poster_path")
     private String moviePosterUrl;
+    @SerializedName("vote_average")
     private float movieRating;
+    @SerializedName("overview")
     private String moviePlot;
+    @SerializedName("release_date")
     private String movieReleaseDate;
 
     public Movie() {
