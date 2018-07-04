@@ -1,7 +1,5 @@
 # Popular Movies
 
--------------
-
 Popular Movies is a movie discovery app which lets the user find movies and get more information about them using TheMovieDb API.
 
 
@@ -16,7 +14,6 @@ Popular Movies is a movie discovery app which lets the user find movies and get 
 
 ## Setup
 
--------
 
 If you want to download this app and test in your device or emulator:
 
