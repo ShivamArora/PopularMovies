@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/dp_160"
+    android:layout_height="@dimen/dp_100"
+    android:layout_marginEnd="@dimen/dp_16"
+    android:layout_marginTop="@dimen/dp_16"
+    android:layout_marginRight="@dimen/dp_16"
+    android:layout_marginBottom="@dimen/dp_16">
+
+    <ImageView
+        android:id="@+id/iv_trailer_thummbnail"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="@dimen/dp_0"
+        android:scaleType="fitXY"
+        app:srcCompat="@android:color/holo_red_light"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <ImageView
+        android:id="@+id/iv_icon_play"
+        android:layout_width="@dimen/dp_36"
+        android:layout_height="@dimen/dp_36"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_media_play" />
+</android.support.constraint.ConstraintLayout>

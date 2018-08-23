@@ -120,10 +120,18 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp_16"
             android:layout_marginTop="@dimen/dp_8"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/textView6"
             app:layout_constraintStart_toStartOf="@+id/textView6"
             app:layout_constraintTop_toBottomOf="@+id/textView6"
             tools:text="Here goes the plot of the movie..." />
+
+        <include layout="@layout/layout_movie_extra_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_movie_plot"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/dp_16"/>
     </android.support.constraint.ConstraintLayout>
+
 </ScrollView>

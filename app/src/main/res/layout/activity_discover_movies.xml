@@ -35,5 +35,6 @@
             android:visibility="visible" />
     </FrameLayout>
 
+    <!--Include the bottom sheet layout-->
     <include layout="@layout/layout_sort_movies"/>
 </android.support.design.widget.CoordinatorLayout>
