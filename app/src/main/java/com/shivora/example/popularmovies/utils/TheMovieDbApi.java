@@ -1,5 +1,6 @@
 package com.shivora.example.popularmovies.utils;
 
+import com.shivora.example.popularmovies.data.MovieReviewsList;
 import com.shivora.example.popularmovies.data.MovieTrailersList;
 import com.shivora.example.popularmovies.data.MoviesList;
 
@@ -13,4 +14,7 @@ public interface TheMovieDbApi {
 
     @GET("/3/movie/{movieId}/videos")
     Call<MovieTrailersList> getMovieTrailersList(@Path("movieId") String movieId);
+
+    @GET("/3/movie/{movieId}/reviews")
+    Call<MovieReviewsList> getMovieReviewsList(@Path("movieId") String movieId);
 }
