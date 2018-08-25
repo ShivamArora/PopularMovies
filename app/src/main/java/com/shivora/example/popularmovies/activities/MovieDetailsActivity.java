@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -61,7 +62,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieTrai
     TextView tvRating;
     @BindView(R.id.tv_movie_plot)
     TextView tvMoviePlot;
-    @BindView(android.R.id.content)
+    @BindView(R.id.layout_movie_details)
             View rootView;
     @BindView(R.id.recycler_view_movie_trailers)
     RecyclerView recyclerView;
@@ -73,6 +74,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieTrai
     View bottomSheetReviews;
     @BindView(R.id.tv_no_reviews_found)
     TextView tvNoReviewsFound;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     @BindString(R.string.movies_api_key)
             String apiKey;
@@ -82,6 +85,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieTrai
     private Context context;
     private MovieTrailersAdapter mAdapter;
     private MovieReviewsAdapter mReviewsAdapter;
+    private boolean isFavorite;
 
     private BottomSheetBehavior mReviewsBottomSheetBehavior;
 
@@ -120,6 +124,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieTrai
                         newState==BottomSheetBehavior.STATE_SETTLING||newState==BottomSheetBehavior.STATE_EXPANDED
                                 ?R.drawable.ic_round_arrow_drop_down_circle_24px
                                 :R.drawable.ic_round_arrow_up_circle_24px);
+
+                if (newState == BottomSheetBehavior.STATE_DRAGGING || newState == BottomSheetBehavior.STATE_EXPANDED){
+                    fab.hide();
+                }
+                else if (newState == BottomSheetBehavior.STATE_SETTLING || newState == BottomSheetBehavior.STATE_COLLAPSED){
+                    fab.show();
+                }
             }
 
             @Override
@@ -131,10 +142,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieTrai
 
     @OnClick(R.id.layout_reviews_label)
     public void toggleReviewsVisibility(){
-        if (mReviewsBottomSheetBehavior.getState()==BottomSheetBehavior.STATE_COLLAPSED)
+        if (mReviewsBottomSheetBehavior.getState()==BottomSheetBehavior.STATE_COLLAPSED) {
             mReviewsBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        else
+            fab.hide();
+        }
+        else {
             mReviewsBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            fab.show();
+        }
     }
     //Retrofit implementation
     private void getMovieReviewsList() {
@@ -266,6 +281,24 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieTrai
         }
         else{
             finish();
+        }
+    }
+
+    @OnClick(R.id.fab)
+    public void onFavoriteBtnClicked(){
+        toggleFabIcon();
+    }
+
+    private void toggleFabIcon() {
+        if (!isFavorite){
+            fab.setImageResource(R.drawable.ic_favorite_white_24dp);
+            isFavorite = true;
+            Snackbar.make(rootView,"Saved to favorites!",Snackbar.LENGTH_LONG).show();
+        }
+        else{
+            fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
+            isFavorite = false;
+            Snackbar.make(rootView,"Deleted from favorites!",Snackbar.LENGTH_LONG).show();
         }
     }
 }

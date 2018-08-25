@@ -142,5 +142,16 @@
             android:layout_marginRight="@dimen/dp_16"/>
     </android.support.constraint.ConstraintLayout>
     </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        app:srcCompat="@drawable/ic_favorite_border_white_24dp"
+        app:fabSize="normal"
+        app:rippleColor="@color/colorAccentDark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/dp_16"/>
+
     <include layout="@layout/bottomsheet_reviews"/>
 </android.support.design.widget.CoordinatorLayout>
