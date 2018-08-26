@@ -314,7 +314,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieTrai
             mReviewsBottomSheetBehavior.setState(mReviewsBottomSheetBehavior.STATE_COLLAPSED);
         }
         else{
-            finish();
+            super.onBackPressed();
         }
     }
 

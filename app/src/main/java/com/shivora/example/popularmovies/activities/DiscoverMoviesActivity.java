@@ -70,7 +70,6 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
     private static final String TAG = DiscoverMoviesActivity.class.getSimpleName();
     private static List<Movie> moviesList;
     private Context context;
-    private MoviesDatabase moviesDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +79,6 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
 
         context = DiscoverMoviesActivity.this;
         moviesList = new ArrayList<>();
-        moviesDatabase = MoviesDatabase.getsInstance(context);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,Integer.parseInt(spanCount));
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -167,12 +165,15 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
 
     @OnClick(R.id.layout_show_favorite_movies)
     public void showFavoriteMovies(){
+        sortOrder = SortOrder.SORT_BY_FAVORITES;
         MoviesViewModel viewModel = ViewModelProviders.of(DiscoverMoviesActivity.this).get(MoviesViewModel.class);
         LiveData<List<Movie>> favoriteMoviesList = viewModel.getMoviesList();
         favoriteMoviesList.observe(DiscoverMoviesActivity.this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
-                setMoviesList(movies);
+                if (sortOrder==SortOrder.SORT_BY_FAVORITES){
+                    setMoviesList(movies);
+                }
             }
         });
         tvSortedBy.setText(R.string.favorite_movies);
@@ -194,7 +195,8 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
     //Sort Order enumerable
     enum SortOrder{
         SORT_BY_POPULARITY,
-        SORT_BY_TOP_RATED
+        SORT_BY_TOP_RATED,
+        SORT_BY_FAVORITES
     }
 
     //Retrofit Implementation
