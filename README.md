@@ -10,6 +10,9 @@ Popular Movies is a movie discovery app which lets the user find movies and get 
 
 - Popular Movies
 - Top Rated Movies
+- Favorite Movies
+- View movie trailers
+- View movie reviews
 - Movie Ratings
 
 

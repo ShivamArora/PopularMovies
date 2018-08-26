@@ -74,7 +74,7 @@ public class MovieTrailersAdapter extends RecyclerView.Adapter<MovieTrailersAdap
         public void bind(int position){
             Log.d("Adapter", "bind: "+movieTrailers.get(position).getMovieVideoKey());
             String videoKey = movieTrailers.get(position).getMovieVideoKey();
-            Glide.with(this.itemView).load("https://img.youtube.com/vi/"+videoKey+"/default.jpg").into(ivThumbnail);
+            Glide.with(this.itemView).load("https://img.youtube.com/vi/"+videoKey+"/mqdefault.jpg").into(ivThumbnail);
         }
 
         @Override
