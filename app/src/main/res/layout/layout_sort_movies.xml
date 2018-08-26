@@ -75,14 +75,14 @@
             android:layout_marginRight="@dimen/dp_16"
             android:layout_marginStart="@dimen/dp_16"
             android:layout_marginTop="@dimen/dp_16"
-            android:text="@string/sort_by_popular"
+            android:text="@string/popular"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textSize="@dimen/bottom_sheet_item_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/sort_by_popular" />
+            tools:text="@string/popular" />
 
         <ImageView
             android:id="@+id/imageView3"
@@ -95,7 +95,7 @@
             app:layout_constraintBottom_toTopOf="@+id/tv_sort_by_popular"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_sort_by_popular"
-            app:srcCompat="@drawable/ic_round_sort_24px" />
+            app:srcCompat="@drawable/ic_trending_up_black_24dp" />
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
@@ -106,7 +106,7 @@
         app:layout_constraintTop_toBottomOf="@+id/layout_sort_by_popular"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toTopOf="@id/layout_show_favorite_movies">
 
         <ImageView
             android:id="@+id/imageView4"
@@ -119,7 +119,7 @@
             app:layout_constraintBottom_toTopOf="@+id/tv_sort_by_top_rated"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_sort_by_top_rated"
-            app:srcCompat="@drawable/ic_round_sort_24px" />
+            app:srcCompat="@drawable/ic_stars_black_24dp" />
 
         <TextView
             android:id="@+id/tv_sort_by_top_rated"
@@ -131,13 +131,56 @@
             android:layout_marginRight="@dimen/dp_16"
             android:layout_marginStart="@dimen/dp_16"
             android:layout_marginTop="@dimen/dp_16"
-            android:text="@string/sort_by_top_rated"
+            android:text="@string/top_rated"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textSize="@dimen/bottom_sheet_item_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/imageView4"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/sort_by_top_rated" />
+            tools:text="@string/top_rated" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/layout_show_favorite_movies"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@+id/layout_sort_by_top_rated"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_16"
+            app:layout_constraintBottom_toTopOf="@+id/tv_favorite_movies"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_favorite_movies"
+            app:srcCompat="@drawable/ic_favorite_black_24dp" />
+
+        <TextView
+            android:id="@+id/tv_favorite_movies"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:layout_marginLeft="@dimen/dp_16"
+            android:layout_marginRight="@dimen/dp_16"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_16"
+            android:text="@string/favorite_movies"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textSize="@dimen/bottom_sheet_item_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageView5"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/favorite_movies" />
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

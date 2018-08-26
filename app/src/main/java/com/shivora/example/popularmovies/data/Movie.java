@@ -1,12 +1,16 @@
 package com.shivora.example.popularmovies.data;
 
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "movies")
 public class Movie implements Parcelable{
-
+    @PrimaryKey
     @SerializedName("id")
     private int movieId;
     @SerializedName("title")
@@ -20,6 +24,7 @@ public class Movie implements Parcelable{
     @SerializedName("release_date")
     private String movieReleaseDate;
 
+    @Ignore
     public Movie() {
     }
 

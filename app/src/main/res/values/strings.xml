@@ -22,4 +22,5 @@
     <string name="label_trailers">Trailers</string>
     <string name="reviews">Reviews</string>
     <string name="no_reviews_found">No reviews found!</string>
+    <string name="favorite_movies">Favorite Movies</string>
 </resources>

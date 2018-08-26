@@ -1,8 +1,12 @@
 package com.shivora.example.popularmovies.activities;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,10 +21,12 @@ import android.widget.TextView;
 import com.shivora.example.popularmovies.R;
 import com.shivora.example.popularmovies.adapters.MoviesAdapter;
 import com.shivora.example.popularmovies.data.Movie;
+import com.shivora.example.popularmovies.data.database.MoviesDatabase;
 import com.shivora.example.popularmovies.data.MoviesList;
 import com.shivora.example.popularmovies.utils.ConnectionUtils;
 import com.shivora.example.popularmovies.utils.NetworkingUtils;
 import com.shivora.example.popularmovies.utils.TheMovieDbApi;
+import com.shivora.example.popularmovies.utils.viewmodels.MoviesViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +70,7 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
     private static final String TAG = DiscoverMoviesActivity.class.getSimpleName();
     private static List<Movie> moviesList;
     private Context context;
+    private MoviesDatabase moviesDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +80,7 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
 
         context = DiscoverMoviesActivity.this;
         moviesList = new ArrayList<>();
+        moviesDatabase = MoviesDatabase.getsInstance(context);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,Integer.parseInt(spanCount));
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -155,6 +163,20 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
         tvSortedBy.setText(R.string.top_rated);
         collapseSortOptions();
         getMoviesList();
+    }
+
+    @OnClick(R.id.layout_show_favorite_movies)
+    public void showFavoriteMovies(){
+        MoviesViewModel viewModel = ViewModelProviders.of(DiscoverMoviesActivity.this).get(MoviesViewModel.class);
+        LiveData<List<Movie>> favoriteMoviesList = viewModel.getMoviesList();
+        favoriteMoviesList.observe(DiscoverMoviesActivity.this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(@Nullable List<Movie> movies) {
+                setMoviesList(movies);
+            }
+        });
+        tvSortedBy.setText(R.string.favorite_movies);
+        collapseSortOptions();
     }
 
     @Override

@@ -1,10 +1,14 @@
 package com.shivora.example.popularmovies.activities;
 
 import android.app.ActionBar;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -29,9 +33,13 @@ import com.shivora.example.popularmovies.data.Movie;
 import com.shivora.example.popularmovies.data.MovieReviewsList;
 import com.shivora.example.popularmovies.data.MovieTrailersList;
 import com.shivora.example.popularmovies.data.MovieTrailersList.MovieTrailer;
+import com.shivora.example.popularmovies.data.database.MoviesDatabase;
+import com.shivora.example.popularmovies.utils.AppExecutors;
 import com.shivora.example.popularmovies.utils.ConnectionUtils;
 import com.shivora.example.popularmovies.utils.NetworkingUtils;
 import com.shivora.example.popularmovies.utils.TheMovieDbApi;
+import com.shivora.example.popularmovies.utils.viewmodels.MovieViewModelFactory;
+import com.shivora.example.popularmovies.utils.viewmodels.ParameterizedMoviesViewModel;
 
 import java.util.List;
 
@@ -86,6 +94,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieTrai
     private MovieTrailersAdapter mAdapter;
     private MovieReviewsAdapter mReviewsAdapter;
     private boolean isFavorite;
+    private MoviesDatabase moviesDatabase;
 
     private BottomSheetBehavior mReviewsBottomSheetBehavior;
 
@@ -103,6 +112,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieTrai
 
         context = MovieDetailsActivity.this;
         movie = getIntent().getParcelableExtra(DiscoverMoviesActivity.EXTRA_MOVIE);
+        moviesDatabase = MoviesDatabase.getsInstance(context);
+        //Check if movie is in favorites using movieId, if YES, set isFavorite=true and update FAB accordingly
+        isFavoriteMovie(movie);
 
         //RecyclerView Implementation
 
@@ -113,6 +125,28 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieTrai
         getMovieReviewsList();
 
         setupReviewsBottomSheet();
+    }
+
+    private void isFavoriteMovie(Movie movie) {
+        //Create ViewModelFactory instance
+        MovieViewModelFactory viewModelFactory = new MovieViewModelFactory(moviesDatabase,movie.getMovieId());
+        ParameterizedMoviesViewModel viewModel = ViewModelProviders.of(MovieDetailsActivity.this,viewModelFactory)
+                                                            .get(ParameterizedMoviesViewModel.class);
+        final LiveData<Movie> movieLiveData = viewModel.getMovieLiveData();
+        movieLiveData.observe(MovieDetailsActivity.this, new Observer<Movie>() {
+            @Override
+            public void onChanged(@Nullable Movie movie) {
+                movieLiveData.removeObserver(this);
+                if (movie!=null){
+                    isFavorite = true;
+                    fab.setImageResource(R.drawable.ic_favorite_white_24dp);
+                }
+                else{
+                    isFavorite = false;
+                    fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
+                }
+            }
+        });
     }
 
     private void setupReviewsBottomSheet() {
@@ -293,12 +327,26 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieTrai
         if (!isFavorite){
             fab.setImageResource(R.drawable.ic_favorite_white_24dp);
             isFavorite = true;
+            //Add to favorites
+            AppExecutors.getsInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    moviesDatabase.moviesDao().addToFavorites(movie);
+                }
+            });
             Snackbar.make(rootView,"Saved to favorites!",Snackbar.LENGTH_LONG).show();
         }
         else{
             fab.setImageResource(R.drawable.ic_favorite_border_white_24dp);
             isFavorite = false;
-            Snackbar.make(rootView,"Deleted from favorites!",Snackbar.LENGTH_LONG).show();
+            //Remove from favorites
+            AppExecutors.getsInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    moviesDatabase.moviesDao().deleteFromFavorites(movie);
+                }
+            });
+            Snackbar.make(rootView,"Removed from favorites!",Snackbar.LENGTH_LONG).show();
         }
     }
 }
