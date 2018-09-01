@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
@@ -45,6 +46,8 @@ import static android.view.View.GONE;
 public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesAdapter.MovieItemClickListener{
 
     public static final String EXTRA_MOVIE = "movie";
+    public static final String KEY_SORT_ORDER = "sort_order";
+    public static final String KEY_MOVIES_LIST = "movies_list";
     @BindView(R.id.recycler_view_movies)
     RecyclerView recyclerView;
     @BindView(R.id.tv_empty_list)
@@ -86,9 +89,43 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
         adapter = new MoviesAdapter(moviesList,this);
         recyclerView.setAdapter(adapter);
 
+        if (savedInstanceState != null){
+            Log.i(TAG, "onCreate: sortOrder"+savedInstanceState.getInt(KEY_SORT_ORDER));
+            restoreSortOrder(savedInstanceState);
+            moviesList = savedInstanceState.getParcelableArrayList(KEY_MOVIES_LIST);
+            setMoviesList(moviesList);
+        }
+        else{
+            getMoviesList();
+        }
         setupSortOptionsBottomSheet();
-        getMoviesList();
     }
+
+    private void restoreSortOrder(Bundle savedInstanceState) {
+        //Restore sortOrder
+        switch (savedInstanceState.getInt(KEY_SORT_ORDER)){
+            case 0:
+                sortOrder = SortOrder.SORT_BY_POPULARITY;
+                tvSortedBy.setText(R.string.popular);
+                break;
+            case 1:
+                sortOrder = SortOrder.SORT_BY_TOP_RATED;
+                tvSortedBy.setText(R.string.top_rated);
+                break;
+            case 2:
+                sortOrder = SortOrder.SORT_BY_FAVORITES;
+                tvSortedBy.setText(R.string.favorite_movies);
+                break;
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_SORT_ORDER, sortOrder.ordinal());
+        outState.putParcelableArrayList(KEY_MOVIES_LIST, (ArrayList<Movie>) moviesList);
+    }
+
 
     private void setupSortOptionsBottomSheet() {
         bottomSheetBehavior = BottomSheetBehavior.from(sortOptionsBottomSheet);
@@ -193,7 +230,7 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
     }
 
     //Sort Order enumerable
-    enum SortOrder{
+    public enum SortOrder{
         SORT_BY_POPULARITY,
         SORT_BY_TOP_RATED,
         SORT_BY_FAVORITES
@@ -201,10 +238,10 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
 
     //Retrofit Implementation
 
-    public void getMoviesList(){
+    public List<Movie> getMoviesList(){
         if (!ConnectionUtils.haveNetworkConnection(context)){
             showErrorView(true,getString(R.string.no_internet_connection));
-            return;
+            return null;
         }
         else{
             showProgressBar(true);
@@ -215,6 +252,7 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
 
         TheMovieDbApi movieDbApi = retrofit.create(TheMovieDbApi.class);
 
+        Log.i(TAG, "getMoviesList: sortOrder: "+sortOrder);
         Call<MoviesList> call = movieDbApi.getMoviesList(sortOrder==SortOrder.SORT_BY_POPULARITY?POPULARITY:TOP_RATED);
 
         call.enqueue(new Callback<MoviesList>() {
@@ -225,7 +263,9 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
                     Log.d(TAG, "onResponse: ");
 
                     showProgressBar(false);
-                    setMoviesList(response.body().getMoviesList());
+                    moviesList = (ArrayList<Movie>) response.body().getMoviesList();
+                    setMoviesList(moviesList);
+                    recyclerView.scrollToPosition(0);
                 }
             }
 
@@ -237,14 +277,14 @@ public class DiscoverMoviesActivity extends AppCompatActivity implements MoviesA
             }
         });
         Log.d(TAG, "getMoviesList: Fetching Movies");
+        for(Movie movie: moviesList){
+            Log.i(TAG,movie.getMovieTitle());
+        }
+        return moviesList;
     }
 
     private void setMoviesList(List<Movie> movies) {
         moviesList = movies;
-        for(Movie movie: moviesList){
-            Log.i(TAG,movie.getMovieTitle());
-        }
-
         if (moviesList==null){
             progressBar.setVisibility(GONE);
             recyclerView.setVisibility(GONE);

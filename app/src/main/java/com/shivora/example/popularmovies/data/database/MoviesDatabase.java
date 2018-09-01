@@ -16,10 +16,10 @@ public abstract class MoviesDatabase extends RoomDatabase {
 
     private static MoviesDatabase sInstance;
 
-    public static MoviesDatabase getsInstance(Context context){
+    public static MoviesDatabase getInstance(Context context){
         if (sInstance == null){
             synchronized (LOCK){
-                Log.d(TAG, "getsInstance: Creating database instance");
+                Log.d(TAG, "getInstance: Creating database instance");
 
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),MoviesDatabase.class,DATABASE_NAME)
                         .build();

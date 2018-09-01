@@ -16,7 +16,7 @@ public class MoviesViewModel extends AndroidViewModel {
         super(application);
 
         //Initialize the member variable used to cache data
-        MoviesDatabase moviesDatabase = MoviesDatabase.getsInstance(this.getApplication());
+        MoviesDatabase moviesDatabase = MoviesDatabase.getInstance(this.getApplication());
         moviesList = moviesDatabase.moviesDao().getFavoriteMovies();
     }
 

@@ -112,7 +112,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieTrai
 
         context = MovieDetailsActivity.this;
         movie = getIntent().getParcelableExtra(DiscoverMoviesActivity.EXTRA_MOVIE);
-        moviesDatabase = MoviesDatabase.getsInstance(context);
+        moviesDatabase = MoviesDatabase.getInstance(context);
         //Check if movie is in favorites using movieId, if YES, set isFavorite=true and update FAB accordingly
         isFavoriteMovie(movie);
 
